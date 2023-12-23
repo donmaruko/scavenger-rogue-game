@@ -14,9 +14,6 @@ class GameState(Enum):
 # report on potential item value efficiency (algorithm)
 # count how many bogeys defeated, some sort of penalty for killing too many bogeys in 1 instance?
 
-# higher core amount = more things appear (bogeys n usables), maybe map gets bigger, need to implement responsive border
-# rare enemies that actually appear rarely
-
 class RogueLikeGame:
     def __init__(self, width, height, num_items_to_collect):
         self.width = width
@@ -28,8 +25,14 @@ class RogueLikeGame:
         self.num_items_to_collect = num_items_to_collect
         self.items_collected = 0
         self.total_items_collected = 0
+        self.total_monsters_defeated = 0
+        self.total_steps_taken = 0
+        self.cumulative_games = 0
         self.initial_items = 0
         self.initial_monsters = 0
+        self.initial_steps = 0
+        self.initial_items_collected = 0
+        self.initial_monsters_defeated = 0
         self.steps = 0
         self.monsters = []
         self.monsters_defeated = 0
@@ -38,8 +41,17 @@ class RogueLikeGame:
         self.prev_game_state = None
 
     def generate_level(self):
+        field_growth_factor = self.total_items_collected // 100 + 1
+        self.width = 10 * field_growth_factor
+        self.height = 5 * field_growth_factor
         # empty spaces
         self.level = [['.' for _ in range(self.width)] for _ in range(self.height)]
+        
+        self.initial_items = sum(row.count('I') for row in self.level)
+        self.initial_monsters = len(self.monsters)
+        self.initial_steps = self.steps
+        self.initial_items_collected = self.items_collected
+        self.initial_monsters_defeated = self.monsters_defeated
 
         # random location
         self.player_x = random.randint(0, self.width - 1)
@@ -246,13 +258,13 @@ class RogueLikeGame:
     def display_lore(self):
         self.clear_screen()
         lore = """
-        You're remote-controlling a Voyager drone in a perilous 
-        planetary zone, hunting for oxygen cores. Gather as many 
-        cores as possible, and engage in combat with bogeys for 
-        extra cores. Be cautious—your drone has limited steps!
+        You are remote-controlling a voyager drone on a perilous area of a 
+        planet in search for oxygen cores. Collect as many cores as you can. 
+        You can choose to engage in combat with bogeys to obtain extra cores, 
+        but remember that your drone can only handle so many steps.
 
         PROPERTY OF THE BUREAU OF ORBITAL OBSERVATIVES AND ENFORCEMENT
-        MODEL: BOOE OXE9
+        MODEL: BOEE OXE9
         MANUFACTURED IN: 2170
         FIRMWARE: NYX OS 2.08
         STATUS: STABLE (NO MAINTENANCE REQUIRED)
@@ -314,6 +326,7 @@ class RogueLikeGame:
             self.monsters_defeated = 0
             self.generate_level()
             self.print_level()
+            print("Your current goal is: 100 cores")
          
             emergency_exit = input("Enter 'E' for emergency exit, or any other key to continue: ").upper()
 
@@ -344,11 +357,23 @@ class RogueLikeGame:
                         print("Drone malfunctioned, all cores lost, mission failed.")
                         self.items_collected = 0
                         self.total_items_collected = 0
-                        break
                     else:
-                        # update the total_items_collected attribute
-                        self.total_items_collected += self.items_collected
-                        print(f"You collected a total of {self.total_items_collected} core(s).")
+                        if self.total_items_collected % 100 == 0:
+                            next_goal = self.total_items_collected + 100
+                            print(f"Great work! Your new goal is {next_goal} cores.")
+
+                            self.generate_level()
+
+                    self.total_items_collected += self.items_collected
+                    self.total_monsters_defeated += self.monsters_defeated
+                    self.total_steps_taken += self.steps
+                    self.cumulative_games += 1
+
+                    print(f"-> Total cores collected: {self.total_items_collected} <-")
+                    print(f"-> Total bogeys defeated: {self.total_monsters_defeated} <-")
+                    print(f"-> Total steps taken: {self.total_steps_taken} <-")
+                    print(f"-> Cumulative voyages: {self.cumulative_games} <-")
+
                     break
 
                 self.print_level()
@@ -430,6 +455,9 @@ class RogueLikeGame:
                     if missed_monsters > 0:
                         print(f"You missed {missed_monsters} bogey(s) on the map.")
 
+                    self.initial_steps += self.steps
+                    self.initial_items_collected += self.items_collected
+                    self.initial_monsters_defeated += self.monsters_defeated
                     print("Until next time.")
                     exit_game = True
                 else:
