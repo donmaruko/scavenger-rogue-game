@@ -249,7 +249,7 @@ class RogueLikeGame:
         but remember that your drone can only handle so many steps.
 
         PROPERTY OF THE BUREAU OF ORBITAL OBSERVATIVES AND ENFORCEMENT
-        MODEL: BOEE OXE9
+        MODEL: BOOE OXE9
         MANUFACTURED IN: 2170
         FIRMWARE: NYX OS 2.08
         STATUS: STABLE (NO MAINTENANCE REQUIRED)
