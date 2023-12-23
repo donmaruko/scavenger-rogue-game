@@ -370,10 +370,10 @@ class RogueLikeGame:
                     self.total_steps_taken += self.steps
                     self.cumulative_games += 1
 
-                    print(f"-> Total cores collected: {self.total_items_collected} <-")
-                    print(f"-> Total bogeys defeated: {self.total_monsters_defeated} <-")
-                    print(f"-> Total steps taken: {self.total_steps_taken} <-")
-                    print(f"-> Cumulative voyages: {self.cumulative_games} <-")
+                    print(f"-> Total cores collected: {self.total_items_collected:4} <-")
+                    print(f"-> Total bogeys defeated: {self.total_monsters_defeated:4} <-")
+                    print(f"-> Total steps taken:     {self.total_steps_taken:4} <-")
+                    print(f"-> Cumulative voyages:    {self.cumulative_games:4} <-")
 
                     break
 
