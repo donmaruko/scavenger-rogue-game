@@ -13,7 +13,6 @@ Scavenger is a text-based Rogue-like adventure game where you control a voyager 
 - [Rules](#rules)
 - [Installation](#installation)
 - [Controls](#controls)
-- [Lore](#lore)
 - [Acknowledgements](#acknowledgements)
 
 ## How to Play
@@ -55,10 +54,6 @@ python scavenger.py
 
 - **W/A/S/D**: Navigate the drone up/left/down/right.
 - **E**: Use the emergency exit at the beginning of each game.
-
-## Lore
-
-You are remote-controlling a voyager drone on a perilous area of a planet in search of oxygen cores. Collect as many cores as you can. You can choose to engage in combat with bogeys to obtain extra cores, but remember that your drone can only handle so many steps.
 
 ## Acknowledgements
 
