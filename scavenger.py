@@ -200,11 +200,12 @@ class RogueLikeGame:
         for row in self.level:
             print(" ".join(row))
 
-    def animate_logo(self, logo, delay=0.1):
+    def animate_logo(self, logo, delay=1.0):
         for frame in logo:
             self.clear_screen()
-            print(frame)
-            time.sleep(delay)
+            for line in frame.split('\n'):
+                print(line)
+                time.sleep(delay)
 
     def display_rules(self):
         self.clear_screen()
@@ -260,18 +261,7 @@ class RogueLikeGame:
   | )___) )| (___) || (___) || (____/\  | (___) |( /   \ )| (____/\/\____) |
   |/ \___/ (_______)(_______/(_______/  (_______)|/     \| (_______/\_______)
                                                           
-            """,
-            r"""
-   ______   _______  _______  _______    _______           _______  _______ 
-  (  ___ \ (  ___  )(  ___  )(  ____ \  (  ___  )|\     /|(  ____ \(  ____ )
-  | (   ) )| (   ) || (   ) || (    \/  | (   ) |( \   / )| (    \/| (    )|
-  | (__/ / | |   | || |   | || (__      | |   | | \ (_) / | (__    | (____)|
-  |  __ (  | |   | || |   | ||  __)     | |   | |  ) _ (  |  __)   (_____ ( 
-  | (  \ \ | |   | || |   | || (        | |   | | / ( ) \ | (            ) )
-  | )___) )| (___) || (___) || (____/\  | (___) |( /   \ )| (____/\/\____) |
-  |/ \___/ (_______)(_______/(_______/  (_______)|/     \| (_______/\_______)
-                                                           
-            """,
+            """
         ]
         self.animate_text("Welcome to Scavenger", delay=0.1)
         time.sleep(1)
@@ -293,9 +283,9 @@ class RogueLikeGame:
             else:
                 print("Invalid option. Please try again.")
 
-        self.animate_logo(logo_frames, delay=1.0)
-        time.sleep(1) 
-        self.animate_text("Deploying...", delay=0.2)
+        self.animate_logo(logo_frames, delay=0.1)
+        time.sleep(0.5) 
+        self.animate_text("Deploying...", delay=0.1)
         time.sleep(1)
         self.generate_level()
 
