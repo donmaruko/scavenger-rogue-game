@@ -197,14 +197,12 @@ class RogueLikeGame:
 
     def print_level(self):
         self.clear_screen()  # clear console screen
-        border_top_bottom = " ++" + "-" * (self.width * 2 + 2) + "++"  # Updated to have 22 dashes
+        border_top_bottom = " ++" + "-" * (self.width * 2 + 2) + "++"
         print(border_top_bottom)
-
         for row in self.level:
             print(" ++ ", end="")
-            print(" ".join(row).replace(".", " "), end=" ")  # Add whitespace padding on the left
+            print(" ".join(row).replace(".", " "), end=" ")
             print(" ++")
-
         print(border_top_bottom)
         
     def animate_logo(self, logo, delay=1.0):
