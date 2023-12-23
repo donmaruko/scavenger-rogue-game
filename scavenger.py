@@ -227,8 +227,6 @@ class RogueLikeGame:
         I - Core
         C, N, R - Common, Normal, Rare bogeys
         # - Obstacle
-
-        Good luck!
         """
         print(rules)
         print("Press any key to exit")
@@ -334,8 +332,10 @@ class RogueLikeGame:
                     
                     # check for drone malfunction condition
                     if self.steps > 3 * self.items_collected:  # compare with three times the initial number of items
-                        print("Drone malfunctioned, mission failed.")
+                        print("Drone malfunctioned, all cores lost, mission failed.")
+                        self.items_collected = 0
                         self.total_items_collected = 0
+                        break
                     else:
                         # update the total_items_collected attribute
                         self.total_items_collected += self.items_collected
