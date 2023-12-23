@@ -9,9 +9,10 @@ class GameState(Enum):
     VIEWING_RULES = 2
     VIEWING_LORE = 3
 
-# bureau of orbital observatives & enforcement
-# penalty for not clearing the entire area
+# penalty for not clearing the entire area??
+# make core goal
 # report on potential item value efficiency (algorithm)
+# count how many bogeys defeated, some sort of penalty for killing too many bogeys in 1 instance?
 
 class RogueLikeGame:
     def __init__(self, width, height, num_items_to_collect):
@@ -247,7 +248,11 @@ class RogueLikeGame:
         You can choose to engage in combat with bogeys to obtain extra cores, 
         but remember that your drone can only handle so many steps.
 
+        PROPERTY OF THE BUREAU OF ORBITAL OBSERVATIVES AND ENFORCEMENT
         MODEL: BOEE OXE9
+        MANUFACTURED IN: 2170
+        FIRMWARE: NYX OS 2.08
+        STATUS: STABLE (NO MAINTENANCE REQUIRED)
         """
         print(lore)
         print("Press any key to resume the game")
@@ -272,10 +277,11 @@ class RogueLikeGame:
         time.sleep(1)
         while True:
             self.clear_screen()
-            print("Main Menu:")
+            print("Powered by AstraShell")
             print("1. Read Rules (H)")
             print("2. Read Lore (L)")
             print("3. Deploy Drone (D)")
+            print("4. Terminate (T)")
 
             option = input("Select an option: ").upper()
 
@@ -285,6 +291,11 @@ class RogueLikeGame:
                 self.display_lore()
             elif option == 'D':
                 break
+            elif option == 'T':
+                print("Clearing cache...")
+                time.sleep(0.5)
+                print("Shutting down")
+                exit()  # terminate the program
             else:
                 print("Invalid option. Please try again.")
 
