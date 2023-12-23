@@ -243,10 +243,10 @@ class RogueLikeGame:
     def display_lore(self):
         self.clear_screen()
         lore = """
-        You are remote-controlling a voyager drone on a perilous area of a 
-        planet in search for oxygen cores. Collect as many cores as you can. 
-        You can choose to engage in combat with bogeys to obtain extra cores, 
-        but remember that your drone can only handle so many steps.
+        You're remote-controlling a Voyager drone in a perilous 
+        planetary zone, hunting for oxygen cores. Gather as many 
+        cores as possible, and engage in combat with bogeys for 
+        extra cores. Be cautious—your drone has limited steps!
 
         PROPERTY OF THE BUREAU OF ORBITAL OBSERVATIVES AND ENFORCEMENT
         MODEL: BOOE OXE9
