@@ -9,10 +9,9 @@ class GameState(Enum):
     VIEWING_RULES = 2
     VIEWING_LORE = 3
 
-# penalty for not clearing the entire area??
-# make core goal
 # report on potential item value efficiency (algorithm)
-# count how many bogeys defeated, some sort of penalty for killing too many bogeys in 1 instance?
+# some sort of penalty for killing too many bogeys in 1 instance?
+# progressively gets harder/bigger the more cores you have (core goals)
 
 class RogueLikeGame:
     def __init__(self, width, height, num_items_to_collect):
@@ -46,7 +45,7 @@ class RogueLikeGame:
         self.height = 5 * field_growth_factor
         # empty spaces
         self.level = [['.' for _ in range(self.width)] for _ in range(self.height)]
-        
+
         self.initial_items = sum(row.count('I') for row in self.level)
         self.initial_monsters = len(self.monsters)
         self.initial_steps = self.steps
@@ -63,12 +62,14 @@ class RogueLikeGame:
         for _ in range(num_obstacles):
             obstacle_x = random.randint(0, self.width - 1)
             obstacle_y = random.randint(0, self.height - 1)
-
-            # Make sure obstacles are not placed on the player
-            while (obstacle_x == self.player_x and obstacle_y == self.player_y):
+            # make sure obstacles are not placed on the player, exit, or existing obstacles
+            while (
+                (obstacle_x == self.player_x and obstacle_y == self.player_y) or
+                (obstacle_x == self.exit_x and obstacle_y == self.exit_y) or
+                self.level[obstacle_y][obstacle_x] == '#'
+            ):
                 obstacle_x = random.randint(0, self.width - 1)
                 obstacle_y = random.randint(0, self.height - 1)
-
             self.level[obstacle_y][obstacle_x] = '#'
 
         # exit unblocked
@@ -80,12 +81,11 @@ class RogueLikeGame:
 
         self.level[self.exit_y][self.exit_x] = 'E'
 
-        # items/cores
+        # randomly spawning items
         for _ in range(self.num_items_to_collect):
             while True:
                 item_x = random.randint(0, self.width - 1)
                 item_y = random.randint(0, self.height - 1)
-
                 # make sure the item is not blocked by obstacles, the player, or the exit
                 if (
                     self.level[item_y][item_x] == '.' and
@@ -93,7 +93,6 @@ class RogueLikeGame:
                     (item_x != self.exit_x or item_y != self.exit_y)
                 ):
                     break
-
             self.level[item_y][item_x] = 'I'
 
         # bogeys on the map with random levels
@@ -104,7 +103,6 @@ class RogueLikeGame:
                 monster_x = random.randint(0, self.width - 1)
                 monster_y = random.randint(0, self.height - 1)
                 monster_level = random.choice(list(self.monster_levels.keys()))
-
                 # ensures monster is not blocked by obstacles, the player, the exit, or other monsters
                 if (
                     self.level[monster_y][monster_x] == '.' and
@@ -112,7 +110,6 @@ class RogueLikeGame:
                     (monster_x != self.exit_x or monster_y != self.exit_y)
                 ):
                     break
-
             # diff symbol diff monster
             monster_symbol = self.get_monster_symbol(monster_level)
             self.level[monster_y][monster_x] = monster_symbol
@@ -251,7 +248,9 @@ class RogueLikeGame:
         # - Obstacle
         """
         print(rules)
-        print("Press any key to exit")
+        print("""
+        Press any key to exit
+        """)
         msvcrt.getch()
         self.game_state = self.prev_game_state
 
@@ -270,7 +269,9 @@ class RogueLikeGame:
         STATUS: STABLE (NO MAINTENANCE REQUIRED)
         """
         print(lore)
-        print("Press any key to resume the game")
+        print("""
+        Press any key to exit
+        """)
         msvcrt.getch()
         self.game_state = self.prev_game_state
 
@@ -316,7 +317,7 @@ class RogueLikeGame:
 
         self.animate_logo(logo_frames, delay=0.1)
         time.sleep(0.5) 
-        self.animate_text("Deploying...", delay=0.1)
+        self.animate_text("""   Deploying...   """, delay=0.1)
         time.sleep(1)
         self.generate_level()
 
@@ -360,7 +361,7 @@ class RogueLikeGame:
                     else:
                         if self.total_items_collected % 100 == 0:
                             next_goal = self.total_items_collected + 100
-                            print(f"Great work! Your new goal is {next_goal} cores.")
+                            print(f"Great work! Your goal is {next_goal} cores.")
 
                             self.generate_level()
 
