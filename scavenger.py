@@ -14,6 +14,9 @@ class GameState(Enum):
 # report on potential item value efficiency (algorithm)
 # count how many bogeys defeated, some sort of penalty for killing too many bogeys in 1 instance?
 
+# higher core amount = more things appear (bogeys n usables), maybe map gets bigger, need to implement responsive border
+# rare enemies that actually appear rarely
+
 class RogueLikeGame:
     def __init__(self, width, height, num_items_to_collect):
         self.width = width
