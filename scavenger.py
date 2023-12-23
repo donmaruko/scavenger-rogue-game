@@ -196,10 +196,17 @@ class RogueLikeGame:
         return level_symbol_map.get(monster_level, 'M')  # default to 'M' if level is not recognized
 
     def print_level(self):
-        self.clear_screen() # clear console screen
-        for row in self.level:
-            print(" ".join(row))
+        self.clear_screen()  # clear console screen
+        border_top_bottom = " ++" + "-" * (self.width * 2 + 2) + "++"  # Updated to have 22 dashes
+        print(border_top_bottom)
 
+        for row in self.level:
+            print(" ++ ", end="")
+            print(" ".join(row).replace(".", " "), end=" ")  # Add whitespace padding on the left
+            print(" ++")
+
+        print(border_top_bottom)
+        
     def animate_logo(self, logo, delay=1.0):
         for frame in logo:
             self.clear_screen()
@@ -396,18 +403,27 @@ class RogueLikeGame:
                 else:
                     print("You cannot move through obstacles. Try again.")
 
-            replay = input("Deploy drone? (Y/N): ").upper()
-            if replay != 'Y':
-                # report about missed items or monsters
-                missed_items = self.num_items_to_collect - self.items_collected
-                missed_monsters = len(self.monsters)
+            exit_game = False
+            while not exit_game:
+                replay = input("Deploy drone? (Y/N): ").upper()
+                if replay == 'Y':
+                    break
+                elif replay == 'N':
+                    # report about missed items or monsters
+                    missed_items = self.num_items_to_collect - self.items_collected
+                    missed_monsters = len(self.monsters)
 
-                if missed_items > 0:
-                    print(f"You missed {missed_items} core(s) on the map.")
-                if missed_monsters > 0:
-                    print(f"You missed {missed_monsters} bogey(s) on the map.")
+                    if missed_items > 0:
+                        print(f"You missed {missed_items} core(s) on the map.")
+                    if missed_monsters > 0:
+                        print(f"You missed {missed_monsters} bogey(s) on the map.")
 
-                print("Until next time.")
+                    print("Until next time.")
+                    exit_game = True
+                else:
+                    print("Invalid input. Please enter 'Y' or 'N'.")
+
+            if exit_game:
                 break
 
 if __name__ == "__main__":
