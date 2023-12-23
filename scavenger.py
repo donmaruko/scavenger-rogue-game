@@ -34,15 +34,15 @@ class RogueLikeGame:
         self.prev_game_state = None
 
     def generate_level(self):
-        # Initialize the level with empty spaces
+        # empty spaces
         self.level = [['.' for _ in range(self.width)] for _ in range(self.height)]
 
-        # Place the player at a random location
+        # random location
         self.player_x = random.randint(0, self.width - 1)
         self.player_y = random.randint(0, self.height - 1)
         self.level[self.player_y][self.player_x] = 'P'
 
-        # Add some random obstacles
+        # random obstacles
         num_obstacles = random.randint(5, 15)
         for _ in range(num_obstacles):
             obstacle_x = random.randint(0, self.width - 1)
@@ -55,24 +55,22 @@ class RogueLikeGame:
 
             self.level[obstacle_y][obstacle_x] = '#'
 
-        # Place the exit in a location that is not blocked by obstacles
+        # exit unblocked
         while True:
             self.exit_x = random.randint(0, self.width - 1)
             self.exit_y = random.randint(0, self.height - 1)
-
-            # Make sure the exit is not blocked by obstacles
             if self.level[self.exit_y][self.exit_x] == '.':
                 break
 
         self.level[self.exit_y][self.exit_x] = 'E'
 
-        # Place items on the map
+        # items/cores
         for _ in range(self.num_items_to_collect):
             while True:
                 item_x = random.randint(0, self.width - 1)
                 item_y = random.randint(0, self.height - 1)
 
-                # Make sure the item is not blocked by obstacles, the player, or the exit
+                # make sure the item is not blocked by obstacles, the player, or the exit
                 if (
                     self.level[item_y][item_x] == '.' and
                     (item_x != self.player_x or item_y != self.player_y) and
@@ -82,16 +80,16 @@ class RogueLikeGame:
 
             self.level[item_y][item_x] = 'I'
 
-        # Place monsters on the map with random levels
-        # Change the upper limit of num_monsters to increase the chances of bogeys appearing
-        num_monsters = random.randint(1, 4)  # You can adjust the upper limit as needed
+        # bogeys on the map with random levels
+        # change the upper limit of num_monsters to increase the chances of bogeys appearing
+        num_monsters = random.randint(1, 4)
         for _ in range(num_monsters):
             while True:
                 monster_x = random.randint(0, self.width - 1)
                 monster_y = random.randint(0, self.height - 1)
                 monster_level = random.choice(list(self.monster_levels.keys()))
 
-                # Make sure the monster is not blocked by obstacles, the player, the exit, or other monsters
+                # ensures monster is not blocked by obstacles, the player, the exit, or other monsters
                 if (
                     self.level[monster_y][monster_x] == '.' and
                     (monster_x != self.player_x or monster_y != self.player_y) and
@@ -99,32 +97,31 @@ class RogueLikeGame:
                 ):
                     break
 
-            # Use different symbols for different monster levels
+            # diff symbol diff monster
             monster_symbol = self.get_monster_symbol(monster_level)
             self.level[monster_y][monster_x] = monster_symbol
             self.monsters.append({'x': monster_x, 'y': monster_y, 'level': monster_level})
 
-
-        # Record the initial number of items
+        # record the initial number of items
         self.initial_items = sum(row.count('I') for row in self.level)
         self.initial_monsters = len(self.monsters)
         
     def move_monsters(self):
         for monster in self.monsters:
-            # Attempt to move the monster away from the player while avoiding obstacles and other objects
+            # attempt to move the monster away from the player while avoiding obstacles and other objects
             move_options = []
 
-            for dx in [-1, 0, 1]:  # Only consider horizontal movements
-                for dy in [-1, 0, 1]:  # Only consider vertical movements
-                    # Skip diagonal movements
+            for dx in [-1, 0, 1]:  # only consider horizontal movements
+                for dy in [-1, 0, 1]:  # only consider vertical movements
+                    # no diagonal movements
                     if dx != 0 and dy != 0:
                         continue
 
                     new_x, new_y = monster['x'] + dx, monster['y'] + dy
 
-                    # Check if the new position is within the boundaries
+                    # check if the new position is within the boundaries
                     if 0 <= new_x < self.width and 0 <= new_y < self.height:
-                        # Check if the new position is not an obstacle and is not occupied by items, the player, or the exit
+                        # check if the new position is not an obstacle and is not occupied by items, the player, or the exit
                         if (
                             self.level[new_y][new_x] == '.' and
                             not any(item['x'] == new_x and item['y'] == new_y for item in self.monsters) and
@@ -134,26 +131,26 @@ class RogueLikeGame:
                             move_options.append((dx, dy))
 
             if move_options:
-                # Randomly choose one of the available moves
+                # randomly choose one of the available moves
                 move_direction = random.choice(move_options)
                 new_x, new_y = monster['x'] + move_direction[0], monster['y'] + move_direction[1]
 
-                # Check if the player is adjacent to the monster
+                # check if the player is adjacent to the monster
                 if abs(new_x - self.player_x) <= 1 and abs(new_y - self.player_y) <= 1:
-                    # Player is facing the monster, initiate combat
+                    # player is facing the monster, initiate combat
                     monster_level = monster['level']
                     items_dropped = self.combat(monster_level)
-                    # Update the number of items collected
+                    # update the number of items collected
                     self.items_collected += items_dropped
 
-                    # Remove the defeated monster from the map
+                    # remove the defeated monster from the map
                     self.level[monster['y']][monster['x']] = '.'
                     self.monsters.remove(monster)
                     self.monsters_defeated += 1
 
                 else:
-                    # Move the monster
-                    self.level[monster['y']][monster['x']] = '.'  # Clear the current monster position
+                    # move the monster
+                    self.level[monster['y']][monster['x']] = '.'  # clear the current monster position
                     self.level[new_y][new_x] = self.get_monster_symbol(monster['level'])
                     monster['x'], monster['y'] = new_x, new_y
 
@@ -167,7 +164,7 @@ class RogueLikeGame:
         monster_symbol = self.get_monster_symbol(monster_level)
         print(f"Combat! You encountered a {monster_level} bogey ({monster_symbol}).")
         
-        # Calculate the number of steps based on the monster's level
+        # calculate the number of steps based on the monster's level
         steps_cost = self.monster_levels.get(monster_level, 0)
         print(f"Attacking a {monster_level} bogey costs {steps_cost} step(s).")
         
@@ -175,31 +172,31 @@ class RogueLikeGame:
             action = input("Choose your action (Attack[A]/Run[R]): ").upper()
             if action == 'A':
                 print(f"You attacked the {monster_level} bogey!")
-                # Get the number of items dropped based on monster level
+                # get the number of items dropped based on monster level
                 items_dropped = self.monster_levels.get(monster_level, 0)
                 print(f"You obtained {items_dropped} core(s) from the {monster_level} bogey.")
                 
-                # Deduct steps based on the monster's level
+                # deduct steps based on the monster's level
                 self.steps += steps_cost
                 
                 return items_dropped
             elif action == 'R':
                 print("You ran away from the bogey.")
-                return 0  # No items dropped if the player runs away
+                return 0  # no items dropped if the player runs away
             else:
                 print("Invalid action. Try again.")
 
     def clear_screen(self):
-        # Check the operating system and use the appropriate command to clear the console
+        # check the operating system and use the appropriate command to clear the console
         os.system('cls' if os.name == 'nt' else 'clear')
 
     def get_monster_symbol(self, monster_level):
-        # Map monster levels to symbols
+        # map monster levels to symbols
         level_symbol_map = {'Common': 'C', 'Normal': 'N', 'Rare': 'R'}
-        return level_symbol_map.get(monster_level, 'M')  # Default to 'M' if level is not recognized
+        return level_symbol_map.get(monster_level, 'M')  # default to 'M' if level is not recognized
 
     def print_level(self):
-        self.clear_screen()  # Clear the console screen
+        self.clear_screen() # clear console screen
         for row in self.level:
             print(" ".join(row))
 
@@ -316,14 +313,14 @@ class RogueLikeGame:
             if emergency_exit == 'E':
                 print("Emergency exit activated. Deploying a new drone...")
                 time.sleep(1)
-                continue  # Start a new instance of the game
+                continue  # new game instance
 
             while True:
-                # Check if the player reached the exit
+                # check if the player reached the exit
                 if self.player_x == self.exit_x and self.player_y == self.exit_y:
                     print(f"You reached the exit with {self.items_collected} core(s) while defeating {self.monsters_defeated} bogey(s) in {self.steps} steps.")
 
-                    # Check for missed items and monsters
+                    # check for missed items and monsters
                     missed_items = self.num_items_to_collect - self.items_collected
                     missed_monsters = len(self.monsters)
 
@@ -335,47 +332,45 @@ class RogueLikeGame:
                     if missed_items == 0 and missed_monsters == 0:
                         print("You cleared the field, well done!")
                     
-                    # Check for drone malfunction condition
-                    if self.steps > 3 * self.items_collected:  # Compare with three times the initial number of items
+                    # check for drone malfunction condition
+                    if self.steps > 3 * self.items_collected:  # compare with three times the initial number of items
                         print("Drone malfunctioned, mission failed.")
                         self.total_items_collected = 0
                     else:
-                        # Update the total_items_collected attribute
+                        # update the total_items_collected attribute
                         self.total_items_collected += self.items_collected
                         print(f"You collected a total of {self.total_items_collected} core(s).")
                     break
 
                 self.print_level()
 
-                # Check if there's an item at the player's location
+                # if there's an item at the player's location
                 if self.level[self.player_y][self.player_x] == 'I':
                     print("You found a core!")
                     self.items_collected += 1
                     self.level[self.player_y][self.player_x] = '.'  # Remove the collected item from the map
 
-                # Check if there's a monster at the player's location
+                # if there's a monster at the player's location
                 for monster in self.monsters:
                     if self.player_x == monster['x'] and self.player_y == monster['y']:
                         monster_level = monster['level']
-                        # Combat occurs if the player bumps into a monster
+                        # combat occurs if the player bumps into a monster
                         items_dropped = self.combat(monster_level)
-                        # Update the number of items collected
                         self.items_collected += items_dropped
 
-                        # Remove the defeated monster from the map
+                        # remove the defeated monster from the map
                         self.level[monster['y']][monster['x']] = '.'
                         self.monsters.remove(monster)
                         self.monsters_defeated += 1
 
-                        break  # Exit the loop after encountering and defeating one monster
+                        break  # exit the loop after encountering and defeating one monster
 
-                # Get player input for movement
                 move = input("Enter (W/A/S/D) to move: ").upper()
 
-                # Save the player's current position for potential use in combat
+                # save the player's current position for potential use in combat
                 self.prev_player_x, self.prev_player_y = self.player_x, self.player_y
 
-                # Update player position based on input
+                # update player position based on input
                 new_player_x, new_player_y = self.player_x, self.player_y
                 if move == 'W' and self.player_y > 0:
                     new_player_y -= 1
@@ -389,33 +384,31 @@ class RogueLikeGame:
                     print("Invalid move. Try again.")
                     continue
 
-                # Check if the new position is not an obstacle
+                # check if the new position is not an obstacle
                 if self.level[new_player_y][new_player_x] != '#':
-                    # Clear the old player position
+                    # clear the old player position
                     self.level[self.player_y][self.player_x] = '.'
 
-                    # Check if there's an item at the new position
+                    # check if there's an item at the new position
                     if self.level[new_player_y][new_player_x] == 'I':
                         print("You found a core!")
                         self.items_collected += 1
-                        self.level[new_player_y][new_player_x] = '.'  # Remove the collected item from the map
+                        self.level[new_player_y][new_player_x] = '.'  # remove the collected item from the map
 
-                    # Update the player's position
+                    # update the player's position
                     self.player_x, self.player_y = new_player_x, new_player_y
-                    # Set the new player position in the level
+                    # set the new player position in the level
                     self.level[self.player_y][self.player_x] = 'P'
 
-                    # Move monsters away from the player
+                    # move monsters away from the player
                     self.move_monsters()
-
-                    # Increment the step counter
                     self.steps += 1
                 else:
                     print("You cannot move through obstacles. Try again.")
 
             replay = input("Deploy drone? (Y/N): ").upper()
             if replay != 'Y':
-                # Display a summary message about missed items or monsters
+                # report about missed items or monsters
                 missed_items = self.num_items_to_collect - self.items_collected
                 missed_monsters = len(self.monsters)
 
