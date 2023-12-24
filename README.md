@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Scavenger is a text-based Rogue-like adventure game where you control a voyager drone exploring a perilous area of a distant planet in search of oxygen cores. Your mission is to collect as many cores as possible, defeat hostile bogeys to gain extra cores, and ultimately reach the exit to successfully complete each mission.
+Scavenger is a text-based Rogue-like adventure game where you control a voyager drone exploring a perilous area of a distant planet in search of oxygen cores. Your mission is to collect as many cores as possible, defeat hostile bogeys to gain extra cores, and ultimately reach the exit to successfully complete each mission. **Best enjoyed on an old CRT running MS-DOS or Unix**
 
 **Note: This game is still in development, and improvements are ongoing.**
 
