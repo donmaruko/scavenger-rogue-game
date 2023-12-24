@@ -4,7 +4,6 @@ import time
 import msvcrt
 from enum import Enum
 import pygame # for sound fx
-pygame.init()
 
 class GameState(Enum):
     PLAYING = 1
@@ -51,7 +50,6 @@ class RogueLikeGame:
         self.monster_levels = {'Common': 1, 'Normal': 2, 'Rare': 3}
         self.game_state = GameState.PLAYING
         self.prev_game_state = None
-        self.logo_animation_sound = pygame.mixer.Sound('logo.wav')
 
     def generate_level(self):
         field_growth_factor = self.total_items_collected // 100 + 1
@@ -381,7 +379,6 @@ class RogueLikeGame:
         self.animate_logo(logo_frames, delay=0.1)
         time.sleep(0.5)
         self.animate_text("""   Issued Goal: 600 Cores   """, delay=0.1)
-        self.logo_animation_sound.play()
         time.sleep(0.5)
         self.animate_text("""   Deploying...   """, delay=0.1)
         time.sleep(1)
