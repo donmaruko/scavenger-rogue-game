@@ -3,6 +3,8 @@ import os
 import time
 import msvcrt
 from enum import Enum
+import pygame # for sound fx
+pygame.init()
 
 class GameState(Enum):
     PLAYING = 1
@@ -14,6 +16,15 @@ class GameState(Enum):
 # progressively gets harder/bigger the more cores you have (core goals) (improve)
 # tweak random generation for larger levels for balanced gameplay
 # bigger playfield = higher core goal?
+    
+# random chance of bad weather / sensor malfunctions?
+# other objectives such as capturing aerial images (go to a specific area thats typically surrounded by obstacles)
+# bogeys that steal your cores if approached / when they approach you
+    
+# customizable border? (cosmetics)
+# leaderboards and achievements
+
+# PAUSE menu during gameplay (drone malfunction+fixes, usables)
 
 class RogueLikeGame:
     def __init__(self, width, height, num_items_to_collect):
@@ -40,6 +51,7 @@ class RogueLikeGame:
         self.monster_levels = {'Common': 1, 'Normal': 2, 'Rare': 3}
         self.game_state = GameState.PLAYING
         self.prev_game_state = None
+        self.logo_animation_sound = pygame.mixer.Sound('logo.wav')
 
     def generate_level(self):
         field_growth_factor = self.total_items_collected // 100 + 1
@@ -305,10 +317,13 @@ class RogueLikeGame:
     def display_lore(self):
         self.clear_screen()
         lore = """
-        You're remote-controlling a Voyager drone in a perilous 
-        planetary zone, hunting for oxygen cores. Gather as many 
-        cores as possible, and engage in combat with bogeys for 
+        You're remote-controlling a drone from our Voyager line in a 
+        perilous planetary zone, hunting for oxygen cores. Gather as 
+        many cores as possible, and engage in combat with bogeys for 
         extra cores. Be cautious — your drone has limited steps!
+
+        As you accumulate more cores, you will deploy
+        your drone in increasingly vast areas.
 
         PROPERTY OF THE BUREAU OF ORBITAL OBSERVATIVES AND ENFORCEMENT
         MODEL: BOOE-OXE9
@@ -366,6 +381,7 @@ class RogueLikeGame:
         self.animate_logo(logo_frames, delay=0.1)
         time.sleep(0.5)
         self.animate_text("""   Issued Goal: 600 Cores   """, delay=0.1)
+        self.logo_animation_sound.play()
         time.sleep(0.5)
         self.animate_text("""   Deploying...   """, delay=0.1)
         time.sleep(1)
@@ -384,6 +400,9 @@ class RogueLikeGame:
                 print("Excellent work! 600 cores have been collected. Please return BOOE-OXE9 back to HQ.")
                 exit()
          
+            if self.total_items_collected == 100:
+                            print("Well done! You've reached 100 cores. You're a sixth away from finishing. Exercise more caution from this point forward.")
+
             emergency_exit = input("Enter 'E' for emergency exit, or any other key to continue: ").upper()
 
             if emergency_exit == 'E':
@@ -420,6 +439,9 @@ class RogueLikeGame:
                         if self.total_items_collected % 100 == 0:
                             next_goal = self.total_items_collected + 100
                             print(f"Great work! Your goal is {next_goal} cores.")
+
+                            if next_goal == 200:
+                                print("Keep it up! You've reached 200 cores. Exercise even more caution.")
 
                             self.generate_level()
 
