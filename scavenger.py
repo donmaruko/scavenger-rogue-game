@@ -11,7 +11,9 @@ class GameState(Enum):
 
 # report on potential item value efficiency (algorithm)
 # some sort of penalty for killing too many bogeys in 1 instance?
-# progressively gets harder/bigger the more cores you have (core goals)
+# progressively gets harder/bigger the more cores you have (core goals) (improve)
+# tweak random generation for larger levels for balanced gameplay
+# bigger playfield = higher core goal?
 
 class RogueLikeGame:
     def __init__(self, width, height, num_items_to_collect):
@@ -118,6 +120,52 @@ class RogueLikeGame:
         # record the initial number of items
         self.initial_items = sum(row.count('I') for row in self.level)
         self.initial_monsters = len(self.monsters)
+
+        if field_growth_factor > 1:
+            # Add more obstacles for larger levels
+            num_additional_obstacles = field_growth_factor * 15  # Adjust the factor as needed
+            for _ in range(num_additional_obstacles):
+                obstacle_x = random.randint(0, self.width - 1)
+                obstacle_y = random.randint(0, self.height - 1)
+                while (
+                    (obstacle_x == self.player_x and obstacle_y == self.player_y) or
+                    (obstacle_x == self.exit_x and obstacle_y == self.exit_y) or
+                    self.level[obstacle_y][obstacle_x] == '#'
+                ):
+                    obstacle_x = random.randint(0, self.width - 1)
+                    obstacle_y = random.randint(0, self.height - 1)
+                self.level[obstacle_y][obstacle_x] = '#'
+
+            # Add more items for larger levels
+            num_additional_items = field_growth_factor * 6  # Adjust the factor as needed
+            for _ in range(num_additional_items):
+                while True:
+                    item_x = random.randint(0, self.width - 1)
+                    item_y = random.randint(0, self.height - 1)
+                    if (
+                        self.level[item_y][item_x] == '.' and
+                        (item_x != self.player_x or item_y != self.player_y) and
+                        (item_x != self.exit_x or item_y != self.exit_y)
+                    ):
+                        break
+                self.level[item_y][item_x] = 'I'
+
+            # Add more monsters for larger levels
+            num_additional_monsters = field_growth_factor * 4  # Adjust the factor as needed
+            for _ in range(num_additional_monsters):
+                while True:
+                    monster_x = random.randint(0, self.width - 1)
+                    monster_y = random.randint(0, self.height - 1)
+                    monster_level = random.choice(list(self.monster_levels.keys()))
+                    if (
+                        self.level[monster_y][monster_x] == '.' and
+                        (monster_x != self.player_x or monster_y != self.player_y) and
+                        (monster_x != self.exit_x or monster_y != self.exit_y)
+                    ):
+                        break
+                monster_symbol = self.get_monster_symbol(monster_level)
+                self.level[monster_y][monster_x] = monster_symbol
+                self.monsters.append({'x': monster_x, 'y': monster_y, 'level': monster_level})
 
     def move_monsters(self):
         for monster in self.monsters:
