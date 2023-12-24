@@ -375,7 +375,8 @@ class RogueLikeGame:
             self.monsters_defeated = 0
             self.generate_level()
             self.print_level()
-            print("Your current goal is: 100 cores")
+            current_goal = 100 + ((self.total_items_collected // 100) * 100)
+            print(f"Your current goal is: {current_goal} cores")
          
             emergency_exit = input("Enter 'E' for emergency exit, or any other key to continue: ").upper()
 
