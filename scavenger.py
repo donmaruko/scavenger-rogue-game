@@ -333,7 +333,7 @@ class RogueLikeGame:
   |  __ (  | |   | || |   | ||  __)    (===) | |   | |  ) _ (  |  __)   (_____ ( 
   | (  \ \ | |   | || |   | || (             | |   | | / ( ) \ | (            ) )
   | )___) )| (___) || (___) || (____/\       | (___) |( /   \ )| (____/\/\____) |
-  |/ \___/ (_______)(_______/(_______/       (_______)|/     \| (_______/\______)
+  |/ \___/ (_______)(_______)(_______/       (_______)|/     \|(_______/\_______)
                                                           
             """
         ]
@@ -518,6 +518,7 @@ class RogueLikeGame:
                     self.initial_items_collected += self.items_collected
                     self.initial_monsters_defeated += self.monsters_defeated
                     print("Until next time.")
+                    time.sleep(2)
                     exit_game = True
                 else:
                     print("Invalid input. Please enter 'Y' or 'N'.")
