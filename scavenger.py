@@ -25,7 +25,7 @@ class GameState(Enum):
 
 # PAUSE menu during gameplay (drone malfunction+fixes, usables)
 
-class Scavenger:
+class ScavengerGame:
     def __init__(self, width, height, num_items_to_collect):
         self.width = width
         self.height = height
@@ -546,5 +546,5 @@ class Scavenger:
                 break
 
 if __name__ == "__main__":
-    game = Scavenger(width=10, height=5, num_items_to_collect=3)
+    game = ScavengerGame(width=10, height=5, num_items_to_collect=3)
     game.play()
