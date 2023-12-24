@@ -3,7 +3,7 @@ import os
 import time
 import msvcrt
 from enum import Enum
-import pygame # for sound fx
+# import pygame # for sound fx
 
 class GameState(Enum):
     PLAYING = 1
