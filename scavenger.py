@@ -58,7 +58,7 @@ class RogueLikeGame:
         self.level[self.player_y][self.player_x] = 'P'
 
         # random obstacles
-        num_obstacles = random.randint(5, 15)
+        num_obstacles = random.randint(5, 15)  # Increase the chances of more obstacles
         for _ in range(num_obstacles):
             obstacle_x = random.randint(0, self.width - 1)
             obstacle_y = random.randint(0, self.height - 1)
@@ -97,7 +97,7 @@ class RogueLikeGame:
 
         # bogeys on the map with random levels
         # change the upper limit of num_monsters to increase the chances of bogeys appearing
-        num_monsters = random.randint(1, 4)
+        num_monsters = random.randint(1, 4) 
         for _ in range(num_monsters):
             while True:
                 monster_x = random.randint(0, self.width - 1)
@@ -118,7 +118,7 @@ class RogueLikeGame:
         # record the initial number of items
         self.initial_items = sum(row.count('I') for row in self.level)
         self.initial_monsters = len(self.monsters)
-        
+
     def move_monsters(self):
         for monster in self.monsters:
             # attempt to move the monster away from the player while avoiding obstacles and other objects
@@ -358,6 +358,9 @@ class RogueLikeGame:
                         print("Drone malfunctioned, all cores lost, mission failed.")
                         self.items_collected = 0
                         self.total_items_collected = 0
+                        self.total_monsters_defeated = 0
+                        self.total_steps_taken = 0
+                        self.cumulative_games = 0
                     else:
                         if self.total_items_collected % 100 == 0:
                             next_goal = self.total_items_collected + 100
