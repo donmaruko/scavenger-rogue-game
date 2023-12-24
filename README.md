@@ -57,6 +57,6 @@ python scavenger.py
 
 ## Acknowledgements
 
-This game is inspired by classic Rogue-like games, showcasing procedural level generation, strategic movement, and combat mechanics. It was created as a programming exercise and is open for contributions and improvements. Feel free to explore and enhance the game's features!
+This game is inspired by classic Rogue-like games, showcasing procedural level generation, strategic movement, and combat mechanics. The concept of collecting cores and reaching a certain goal the more you progress has also been inspired by Lethal Company! I created this as a programming exercise and is open for contributions and improvements. Feel free to explore and enhance the game's features!
 
 Enjoy your journey with the Scavenger drone!
