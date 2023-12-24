@@ -99,7 +99,7 @@ class RogueLikeGame:
 
         # bogeys on the map with random levels
         # change the upper limit of num_monsters to increase the chances of bogeys appearing
-        num_monsters = random.randint(1, 4) 
+        num_monsters = random.randint(1, 4)
         for _ in range(num_monsters):
             while True:
                 monster_x = random.randint(0, self.width - 1)
@@ -109,10 +109,10 @@ class RogueLikeGame:
                 if (
                     self.level[monster_y][monster_x] == '.' and
                     (monster_x != self.player_x or monster_y != self.player_y) and
-                    (monster_x != self.exit_x or monster_y != self.exit_y)
+                    (monster_x != self.exit_x or monster_y != self.exit_y) and
+                    not any((item['x'] == monster_x and item['y'] == monster_y) or self.level[monster_y][monster_x] == '#' for item in self.monsters)
                 ):
                     break
-            # diff symbol diff monster
             monster_symbol = self.get_monster_symbol(monster_level)
             self.level[monster_y][monster_x] = monster_symbol
             self.monsters.append({'x': monster_x, 'y': monster_y, 'level': monster_level})
@@ -311,7 +311,7 @@ class RogueLikeGame:
         extra cores. Be cautious — your drone has limited steps!
 
         PROPERTY OF THE BUREAU OF ORBITAL OBSERVATIVES AND ENFORCEMENT
-        MODEL: BOEE OXE9
+        MODEL: BOOE-OXE9
         MANUFACTURED IN: 2170
         FIRMWARE: NYX OS 2.08
         STATUS: STABLE (NO MAINTENANCE REQUIRED)
@@ -326,14 +326,14 @@ class RogueLikeGame:
     def play(self):
         logo_frames = [
             r"""
-   ______   _______  _______  _______    _______           _______  _______ 
-  (  ___ \ (  ___  )(  ___  )(  ____ \  (  ___  )|\     /|(  ____ \(  ____ )
-  | (   ) )| (   ) || (   ) || (    \/  | (   ) |( \   / )| (    \/| (    )|
-  | (__/ / | |   | || |   | || (__      | |   | | \ (_) / | (__    | (____)|
-  |  __ (  | |   | || |   | ||  __)     | |   | |  ) _ (  |  __)   (_____ ( 
-  | (  \ \ | |   | || |   | || (        | |   | | / ( ) \ | (            ) )
-  | )___) )| (___) || (___) || (____/\  | (___) |( /   \ )| (____/\/\____) |
-  |/ \___/ (_______)(_______/(_______/  (_______)|/     \| (_______/\______)
+   ______   _______  _______  _______         _______           _______  _______ 
+  (  ___ \ (  ___  )(  ___  )(  ____ \       (  ___  )|\     /|(  ____ \(  ____ )
+  | (   ) )| (   ) || (   ) || (    \/       | (   ) |( \   / )| (    \/| (    )|
+  | (__/ / | |   | || |   | || (__           | |   | | \ (_) / | (__    | (____)|
+  |  __ (  | |   | || |   | ||  __)    (===) |  | |  |  ) _ (  |  __)   (_____ ( 
+  | (  \ \ | |   | || |   | || (             | |   | | / ( ) \ | (            ) )
+  | )___) )| (___) || (___) || (____/\       | (___) |( /   \ )| (____/\/\____) |
+  |/ \___/ (_______)(_______/(_______/       (_______)|/     \| (_______/\______)
                                                           
             """
         ]
@@ -379,7 +379,7 @@ class RogueLikeGame:
             print(f"Your current goal is: {current_goal} cores")
 
             if self.total_items_collected >= 600:
-                print("Excellent work! 600 cores have been collected. Please head back to HQ.")
+                print("Excellent work! 600 cores have been collected. Please return BOOE-OXE9 back to HQ.")
                 exit()
          
             emergency_exit = input("Enter 'E' for emergency exit, or any other key to continue: ").upper()
