@@ -364,7 +364,9 @@ class RogueLikeGame:
                 print("Invalid option. Please try again.")
 
         self.animate_logo(logo_frames, delay=0.1)
-        time.sleep(0.5) 
+        time.sleep(0.5)
+        self.animate_text("""   Issued Goal: 600 Cores   """, delay=0.1)
+        time.sleep(0.5)
         self.animate_text("""   Deploying...   """, delay=0.1)
         time.sleep(1)
         self.generate_level()
