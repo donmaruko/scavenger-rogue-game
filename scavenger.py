@@ -377,6 +377,10 @@ class RogueLikeGame:
             self.print_level()
             current_goal = 100 + ((self.total_items_collected // 100) * 100)
             print(f"Your current goal is: {current_goal} cores")
+
+            if self.total_items_collected >= 600:
+                print("Excellent work! 600 cores have been collected. Please head back to HQ.")
+                exit()
          
             emergency_exit = input("Enter 'E' for emergency exit, or any other key to continue: ").upper()
 
